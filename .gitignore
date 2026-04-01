@@ -1,0 +1,10 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor configs
+.vscode/
+.idea/
+
+# No node_modules — this project has zero npm dependencies
+node_modules/

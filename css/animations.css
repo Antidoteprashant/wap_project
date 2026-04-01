@@ -1,0 +1,188 @@
+/* ============================================================
+   ANIMATIONS.CSS
+   Loading overlay, weather background particle effects,
+   error dialog styling, weather-driven body backgrounds.
+   PRD §6.4 Weather-Dependent Backgrounds, §6.5 Loading & Error
+============================================================ */
+
+/* ============================================================
+   LOADING OVERLAY
+   NES.css: nes-progress is-primary, nes-container is-dark
+   PRD §6.5 — "Building terrain..." overlay
+============================================================ */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.90);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-box {
+  width: 320px;
+  text-align: center;
+  padding: 28px 24px !important;
+}
+
+.loading-title {
+  font-size: 10px !important;
+  color: var(--accent-gold) !important;
+  margin-bottom: 20px !important;
+  animation: blink-text 1s step-end infinite;
+}
+
+.loading-sub {
+  font-size: 6px !important;
+  color: #888888 !important;
+  margin-top: 14px !important;
+  margin-bottom: 0 !important;
+}
+
+#loading-bar {
+  width: 100%;
+  height: 22px;
+}
+
+@keyframes blink-text {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+/* ============================================================
+   ERROR DIALOG — "You Died!"
+   NES.css: nes-dialog is-dark is-rounded
+   PRD §6.5
+============================================================ */
+#error-dialog {
+  max-width: 360px;
+  width: 90%;
+}
+
+.error-title {
+  font-size: 14px !important;
+  color: var(--danger) !important;
+  text-shadow: 2px 2px 0 #000 !important;
+  margin-bottom: 14px !important;
+}
+
+.error-body {
+  font-size: 7px !important;
+  line-height: 2 !important;
+  color: #cccccc !important;
+  margin-bottom: 20px !important;
+}
+
+.dialog-menu {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+/* ============================================================
+   WEATHER BACKGROUND EFFECT LAYER
+   Positioned behind everything, pure CSS particle effects.
+   PRD §6.4 — weather-dependent backgrounds
+============================================================ */
+.weather-bg-effect {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  transition: background 0.4s ease;
+}
+
+/* ---- Rain ---- */
+.weather-bg-effect.rain::before {
+  content: '';
+  position: absolute;
+  inset: -40px;
+  background: repeating-linear-gradient(
+    97deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(100, 170, 255, 0.10) 3px,
+    rgba(100, 170, 255, 0.10) 4px
+  );
+  animation: rain-fall 0.45s linear infinite;
+}
+
+@keyframes rain-fall {
+  from { background-position: 0    0; }
+  to   { background-position: 30px 60px; }
+}
+
+/* ---- Snow ---- */
+.weather-bg-effect.snow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.70) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,0.50) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,0.35) 1px, transparent 1px);
+  background-size: 55px 55px, 38px 38px, 75px 75px;
+  background-position: 0 0, 18px 18px, 36px 9px;
+  animation: snow-fall 5s linear infinite;
+}
+
+@keyframes snow-fall {
+  from { background-position: 0 -120px,  18px -100px, 36px -80px; }
+  to   { background-position: 8px 100vh, 26px 100vh,  44px 100vh; }
+}
+
+/* ---- Storm (lightning flash + heavy overlay) ---- */
+.weather-bg-effect.storm {
+  animation: storm-flash 5s ease-in-out infinite;
+}
+
+.weather-bg-effect.storm::before {
+  content: '';
+  position: absolute;
+  inset: -40px;
+  background: repeating-linear-gradient(
+    97deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(60, 90, 180, 0.12) 2px,
+    rgba(60, 90, 180, 0.12) 3px
+  );
+  animation: rain-fall 0.3s linear infinite;
+}
+
+@keyframes storm-flash {
+  0%, 87%, 100% { background: transparent; }
+  89%, 91%      { background: rgba(200, 225, 255, 0.18); }
+  90%           { background: rgba(220, 240, 255, 0.28); }
+}
+
+/* ---- Fog ---- */
+.weather-bg-effect.fog {
+  background: rgba(190, 190, 210, 0.22);
+  backdrop-filter: blur(2px);
+}
+
+/* ============================================================
+   DYNAMIC BODY BACKGROUND COLOURS BY WEATHER
+   Applied by ui.js via body class: wx-clear, wx-cloudy, etc.
+   PRD §6.4
+============================================================ */
+
+/* Day mode weather backgrounds */
+body.day-mode.wx-clear   { --bg-primary: #87CEEB; }
+body.day-mode.wx-cloudy  { --bg-primary: #7A8898; }
+body.day-mode.wx-rain    { --bg-primary: #4A5A6E; }
+body.day-mode.wx-snow    { --bg-primary: #B0C8DC; }
+body.day-mode.wx-storm   { --bg-primary: #282830; }
+body.day-mode.wx-fog     { --bg-primary: #8E8E96; }
+
+/* Night mode weather backgrounds */
+body.night-mode.wx-clear  { --bg-primary: #0A0A1C; }
+body.night-mode.wx-cloudy { --bg-primary: #181828; }
+body.night-mode.wx-rain   { --bg-primary: #0A1018; }
+body.night-mode.wx-snow   { --bg-primary: #18202C; }
+body.night-mode.wx-storm  { --bg-primary: #050508; }
+body.night-mode.wx-fog    { --bg-primary: #141418; }
