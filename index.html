@@ -44,7 +44,7 @@
       <button type="button" class="nes-btn is-warning" id="theme-toggle">Night Mode</button>
     </div>
 
-    <!-- Search Bar (styled like Minecraft command input) -->
+    <!-- Search Bar -->
     <div class="search-section">
       <div class="nes-container is-dark search-container">
         <div class="search-row">
@@ -68,9 +68,7 @@
       <section id="current-weather-section" class="hidden">
         <div class="nes-container with-title theme-aware" id="weather-card">
           <p class="title" id="city-name">City Name</p>
-          <div id="weather-content">
-            <!-- Rendered dynamically by ui.js -->
-          </div>
+          <div id="weather-content"></div>
         </div>
       </section>
 
@@ -84,9 +82,7 @@
       <!-- 5-Day Forecast -->
       <section id="forecast-section" class="hidden">
         <h2 class="section-heading">5-Day Forecast</h2>
-        <div class="forecast-row" id="forecast-row">
-          <!-- 5 forecast cards rendered dynamically -->
-        </div>
+        <div class="forecast-row" id="forecast-row"></div>
       </section>
 
     </main>
@@ -121,18 +117,17 @@
 
         <!-- Favorites Grid -->
         <div id="favorites-grid" class="favorites-grid">
-          <!-- Rendered dynamically -->
           <p class="empty-state" id="empty-favorites">No saved cities yet. Search and star a city!</p>
         </div>
 
-        <!-- Clear All Favorites -->
+        <!-- Clear All -->
         <div id="clear-all-row" class="clear-all-row hidden">
           <button type="button" class="nes-btn is-error" id="clear-all-btn" style="font-size:7px;width:100%;">
             ✕ Clear All
           </button>
         </div>
 
-        <!-- Pagination Controls -->
+        <!-- Pagination -->
         <div id="pagination-row" class="pagination-row hidden">
           <button type="button" class="nes-btn" id="fav-prev-btn">◀</button>
           <span class="page-info" id="page-info">1 / 1</span>

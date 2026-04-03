@@ -1,0 +1,55 @@
+/* css/responsive.css — Mobile first, tablet 768px, desktop 1024px */
+
+/* ===== Mobile (default) ===== */
+.app-layout { grid-template-columns: 1fr; }
+.search-prefix { display: none; }
+#search-btn { font-size: 8px; flex-shrink: 0; }
+.game-title { font-size: 11px; }
+#theme-toggle { font-size: 7px; }
+.forecast-row { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.forecast-card { flex: 0 0 110px; }
+.favorites-sidebar { order: 2; }
+.main-content { order: 1; }
+.controls-row { flex-direction: column; }
+
+/* ===== Tablet — 768px+ ===== */
+@media (min-width: 768px) {
+  .search-prefix { display: inline; }
+  .game-title { font-size: 16px; }
+  #theme-toggle { font-size: 9px; }
+  .controls-row { flex-direction: row; }
+
+  .app-layout {
+    grid-template-columns: 1fr 320px;
+    align-items: start;
+  }
+
+  .favorites-sidebar {
+    order: 2;
+    position: sticky;
+    top: 20px;
+  }
+
+  .main-content { order: 1; }
+  .forecast-card { flex: 0 0 130px; }
+}
+
+/* ===== Desktop — 1024px+ ===== */
+@media (min-width: 1024px) {
+  .app-layout {
+    grid-template-columns: 1fr 360px;
+    gap: 24px;
+    padding: 24px 32px;
+  }
+
+  .game-title { font-size: 20px; }
+  #theme-toggle { font-size: 10px; }
+  .app-header { padding: 20px 32px 16px; }
+  .forecast-card { flex: 1; min-width: 110px; }
+  .search-field .nes-input { font-size: 11px; }
+}
+
+/* ===== Large Desktop — 1280px+ ===== */
+@media (min-width: 1280px) {
+  .app-layout { grid-template-columns: 1fr 400px; }
+}

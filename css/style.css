@@ -1,0 +1,165 @@
+/* css/style.css — Global styles, CSS variables, layout grid */
+
+html, body, pre, code, kbd, samp {
+  font-family: "Press Start 2P", monospace;
+}
+
+/* ===== Day / Night Variables ===== */
+:root[data-theme="day"] {
+  --bg-primary: #87CEEB;
+  --bg-secondary: #5B8731;
+  --bg-surface: #F0F0F0;
+  --text-primary: #3F3F3F;
+  --text-heading: #FFFFFF;
+  --accent: #5DB12F;
+  --accent-gold: #FCDB05;
+  --danger: #FF5555;
+  --shadow-color: rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme="night"] {
+  --bg-primary: #1A1A2E;
+  --bg-secondary: #2D1B4E;
+  --bg-surface: #2A2A3E;
+  --text-primary: #FFFFFF;
+  --text-heading: #FCDB05;
+  --accent: #A020F0;
+  --accent-gold: #FCDB05;
+  --danger: #FF5555;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+/* ===== Reset ===== */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* ===== Weather Background Classes ===== */
+body.weather-clear   { background-color: #87CEEB; }
+body.weather-cloudy  { background-color: #B0C4DE; }
+body.weather-rain    { background-color: #607D8B; }
+body.weather-storm   { background-color: #37474F; }
+body.weather-snow    { background-color: #ECEFF1; }
+body.weather-fog     { background-color: #90A4AE; }
+
+[data-theme="night"] body.weather-clear  { background-color: #1A1A2E; }
+[data-theme="night"] body.weather-cloudy { background-color: #1E2A3A; }
+[data-theme="night"] body.weather-rain   { background-color: #1A2530; }
+[data-theme="night"] body.weather-storm  { background-color: #0D1117; }
+[data-theme="night"] body.weather-snow   { background-color: #1E2030; }
+[data-theme="night"] body.weather-fog    { background-color: #1A1A2E; }
+
+/* ===== Headings ===== */
+h1, h2, h3, .title {
+  text-shadow: 2px 2px 0px var(--shadow-color);
+  color: var(--text-heading);
+}
+
+/* ===== NES.css Overrides (Minecraft palette) ===== */
+[data-theme="day"] .nes-btn.is-primary {
+  background-color: #5DB12F;
+  color: #FFFFFF;
+}
+[data-theme="night"] .nes-btn.is-primary {
+  background-color: #A020F0;
+  color: #FFFFFF;
+}
+.nes-icon.star { color: #FCDB05; }
+
+.nes-dialog.death-screen {
+  background-color: #2D0000;
+  color: #FF5555;
+}
+.nes-dialog.death-screen .title {
+  color: #FF5555;
+  text-shadow: 2px 2px 0px #000;
+}
+
+/* ===== Header ===== */
+.app-header {
+  background-color: var(--bg-secondary);
+  padding: 16px 20px 12px;
+  box-shadow: 0 4px 0px var(--shadow-color);
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.game-title {
+  font-size: clamp(12px, 2.5vw, 22px);
+  color: var(--accent-gold);
+  text-shadow: 3px 3px 0px #000;
+  margin: 0;
+}
+
+/* ===== Search ===== */
+.search-container { padding: 12px 16px !important; }
+
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-prefix {
+  font-size: 10px;
+  color: var(--accent-gold);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.search-field { flex: 1; min-width: 0; }
+.search-field .nes-input { width: 100%; font-size: 10px; }
+
+/* ===== Layout Grid ===== */
+.app-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.section-heading {
+  font-size: 12px;
+  margin: 0 0 12px 0;
+  color: var(--text-heading);
+  text-shadow: 2px 2px 0px var(--shadow-color);
+}
+
+/* ===== Utilities ===== */
+.hidden { display: none !important; }
+
+.fav-count-badge {
+  font-size: 8px;
+  background-color: var(--accent-gold);
+  color: #000;
+  padding: 2px 6px;
+  margin-left: 8px;
+}
+
+.clear-all-row { margin-top: 10px; }
+
+.pagination-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.page-info { font-size: 8px; color: var(--text-primary); }

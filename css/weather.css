@@ -1,0 +1,151 @@
+/* css/weather.css — Weather card, forecast, advice balloon, favorites */
+
+/* ===== Current Weather Card ===== */
+#current-weather-section { margin-bottom: 16px; }
+#weather-card { background-color: var(--bg-surface); transition: background-color 0.3s ease; }
+
+.weather-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.weather-icon-display { font-size: 48px; line-height: 1; flex-shrink: 0; }
+
+.weather-temp-block { flex: 1; min-width: 120px; }
+
+.temperature-display {
+  font-size: clamp(18px, 4vw, 32px);
+  color: var(--accent-gold);
+  text-shadow: 2px 2px 0px var(--shadow-color);
+  margin: 0 0 6px 0;
+}
+
+.weather-desc {
+  font-size: 9px;
+  color: var(--text-primary);
+  text-transform: capitalize;
+  margin: 0 0 8px 0;
+}
+
+.feels-like-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.feels-like-label { font-size: 7px; color: var(--text-primary); opacity: 0.8; }
+.feels-like-hearts { display: flex; gap: 2px; }
+
+.weather-details {
+  border-top: 2px solid var(--shadow-color);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.weather-details .nes-list { font-size: 8px; margin: 0; padding: 0; list-style: none; }
+.weather-details .nes-list li { margin-bottom: 6px; color: var(--text-primary); }
+
+.favorite-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.favorite-toggle-row .nes-icon { cursor: pointer; transition: transform 0.1s ease; }
+.favorite-toggle-row .nes-icon:hover { transform: scale(1.2); }
+.fav-toggle-label { font-size: 7px; color: var(--text-primary); opacity: 0.8; }
+
+/* ===== Advice Balloon ===== */
+#advice-section { margin-bottom: 16px; }
+#advice-balloon { background-color: var(--bg-surface); max-width: 600px; }
+#advice-balloon p { font-size: 9px; color: var(--text-primary); margin: 0; line-height: 1.8; }
+
+/* ===== 5-Day Forecast ===== */
+#forecast-section { margin-bottom: 16px; }
+
+.forecast-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--bg-surface);
+}
+
+.forecast-row::-webkit-scrollbar { height: 6px; }
+.forecast-row::-webkit-scrollbar-track { background: var(--bg-surface); }
+.forecast-row::-webkit-scrollbar-thumb { background: var(--accent); }
+
+.forecast-card {
+  flex: 0 0 120px;
+  text-align: center;
+  background-color: var(--bg-surface);
+  transition: background-color 0.3s ease;
+  padding: 12px 8px !important;
+}
+
+.forecast-date {
+  font-size: 7px;
+  color: var(--text-heading);
+  text-shadow: 1px 1px 0px var(--shadow-color);
+  margin: 0 0 8px 0;
+}
+
+.forecast-icon { font-size: 24px; margin: 6px 0; }
+.forecast-temp { font-size: 9px; color: var(--accent-gold); margin: 6px 0 4px 0; }
+.forecast-desc { font-size: 6px; color: var(--text-primary); text-transform: capitalize; margin: 0; line-height: 1.6; }
+
+/* ===== Favorites Sidebar ===== */
+.favorites-sidebar .nes-container {
+  background-color: var(--bg-surface);
+  transition: background-color 0.3s ease;
+}
+
+.controls-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.controls-row .nes-select { flex: 1; min-width: 100px; }
+.controls-row .nes-select select { font-size: 7px; width: 100%; }
+
+.favorites-grid { display: flex; flex-direction: column; gap: 8px; min-height: 60px; }
+
+.empty-state {
+  font-size: 8px;
+  color: var(--text-primary);
+  opacity: 0.6;
+  text-align: center;
+  padding: 20px 0;
+  line-height: 2;
+}
+
+.favorite-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px !important;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+  background-color: var(--bg-surface);
+}
+
+.favorite-card:hover { transform: translateX(2px); }
+
+.fav-city-info { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+.fav-city-name { font-size: 8px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fav-city-meta { font-size: 7px; color: var(--text-primary); opacity: 0.7; }
+
+.fav-icon-col { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.fav-weather-icon { font-size: 18px; }
+
+.fav-remove-btn {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+  padding: 0;
+  line-height: 1;
+}
+.fav-remove-btn:hover { opacity: 1; }
