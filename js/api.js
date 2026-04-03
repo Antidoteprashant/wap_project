@@ -1,5 +1,4 @@
 /* js/api.js — OpenWeatherMap API fetch functions */
-
 // ============================================================
 // HOW TO GET YOUR FREE API KEY:
 // 1. Go to https://openweathermap.org/api
