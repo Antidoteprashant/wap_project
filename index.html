@@ -1,226 +1,160 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="day">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PixelWeather — a Minecraft-themed weather dashboard. Search any city for current conditions and a 5-day forecast, styled in 8-bit pixel art.">
+  <meta name="theme-color" content="#5B8731">
   <title>PixelWeather — Minecraft Weather Dashboard</title>
 
-  <!-- Google Fonts: Press Start 2P (required by NES.css) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-    rel="stylesheet"
-  />
+  <!-- Libraries (CDN) -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-  <!-- NES.css — pixel-art UI framework -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css"
-  />
-
-  <!-- Animate.css — entrance & effect animations -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
-
-  <!-- App stylesheets -->
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/weather.css" />
-  <link rel="stylesheet" href="css/animations.css" />
-  <link rel="stylesheet" href="css/responsive.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/weather.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
 </head>
+<body>
 
-<body class="day-mode">
-
-  <!-- ================================================
-       WEATHER BACKGROUND EFFECT LAYER (rain / snow / fog)
-  ================================================ -->
-  <div id="weather-bg-effect" class="weather-bg-effect"></div>
-
-  <!-- ================================================
-       LOADING OVERLAY
-       NES.css: nes-progress is-primary + "Building terrain..."
-  ================================================ -->
+  <!-- ===== LOADING OVERLAY ===== -->
   <div id="loading-overlay" class="loading-overlay hidden">
-    <div class="loading-box nes-container is-dark is-rounded">
-      <p class="loading-title">Building terrain...</p>
-      <progress
-        class="nes-progress is-primary"
-        id="loading-bar"
-        value="0"
-        max="100"
-      ></progress>
-      <p class="loading-sub">Fetching weather data...</p>
-    </div>
+    <p class="animate__animated animate__pulse animate__infinite">Building terrain...</p>
+    <progress class="nes-progress is-primary" value="70" max="100" style="width: 300px;"></progress>
   </div>
 
-  <!-- ================================================
-       ERROR DIALOG — "You Died!"
-       NES.css: nes-dialog is-dark is-rounded
-  ================================================ -->
-  <dialog id="error-dialog" class="nes-dialog is-dark is-rounded">
+  <!-- ===== ERROR DIALOG ===== -->
+  <dialog class="nes-dialog is-dark is-rounded death-screen" id="error-dialog">
     <form method="dialog">
-      <p class="title error-title">You Died!</p>
-      <p id="error-message" class="error-body">City not found. Try again!</p>
+      <p class="title">You died!</p>
+      <p id="error-message">Something went wrong in the overworld!</p>
       <menu class="dialog-menu">
-        <button
-          type="button"
-          id="error-close-btn"
-          class="nes-btn is-error"
-        >
-          Respawn
-        </button>
+        <button class="nes-btn is-error" id="respawn-btn">Respawn</button>
       </menu>
     </form>
   </dialog>
 
-  <!-- ================================================
-       HEADER
-  ================================================ -->
+  <!-- ===== HEADER ===== -->
   <header class="app-header">
-    <div class="header-inner">
-      <div class="logo-wrap">
-        <span class="logo-icon" aria-hidden="true">⛏</span>
-        <h1 class="logo-text">PixelWeather</h1>
-      </div>
+    <div class="header-top">
+      <h1 class="game-title">PixelWeather</h1>
+      <button type="button" class="nes-btn is-warning" id="theme-toggle">Night Mode</button>
+    </div>
 
-      <button
-        id="theme-toggle-btn"
-        class="nes-btn is-warning theme-btn"
-        aria-label="Toggle day/night mode"
-      >
-        ☀ Day
-      </button>
+    <!-- Search Bar (styled like Minecraft command input) -->
+    <div class="search-section">
+      <div class="nes-container is-dark search-container">
+        <div class="search-row">
+          <span class="search-prefix">/weather</span>
+          <div class="nes-field search-field">
+            <input type="text" id="search-input" class="nes-input is-dark" placeholder="Enter city name..." autocomplete="off">
+          </div>
+          <button type="button" class="nes-btn is-primary" id="search-btn">Search</button>
+        </div>
+      </div>
     </div>
   </header>
 
-  <!-- ================================================
-       SEARCH SECTION
-       NES.css: nes-input inside nes-container is-dark
-  ================================================ -->
-  <section class="search-section" aria-label="City search">
-    <div class="nes-container is-dark search-container">
-      <div class="search-inner">
-        <div class="nes-field search-field">
-          <label for="city-input" class="sr-only">Enter city name</label>
-          <input
-            type="text"
-            id="city-input"
-            class="nes-input is-dark"
-            placeholder="Enter city name..."
-            autocomplete="off"
-            aria-label="City name"
-          />
-        </div>
-        <button
-          id="search-btn"
-          class="nes-btn is-primary search-btn"
-          aria-label="Search weather"
-        >
-          Search
-        </button>
-      </div>
-      <p class="search-hint">
-        Try: London &nbsp;·&nbsp; Tokyo &nbsp;·&nbsp; New York &nbsp;·&nbsp; Mumbai
-      </p>
-    </div>
-  </section>
+  <!-- ===== MAIN LAYOUT ===== -->
+  <div class="app-layout">
 
-  <!-- ================================================
-       MAIN CONTENT (hidden until first fetch succeeds)
-  ================================================ -->
-  <main id="main-content" class="main-content hidden" aria-live="polite">
+    <!-- Main Content -->
+    <main class="main-content">
 
-    <!-- ---- Current Weather Card ---- -->
-    <section
-      class="current-weather-section animate__animated animate__fadeInUp"
-      aria-label="Current weather"
-    >
-      <div class="nes-container with-title is-dark current-card" id="current-weather-card">
-        <p class="title" id="card-city-title">Current Weather</p>
-
-        <div class="weather-card-inner">
-
-          <!-- Column 1: Icon + condition -->
-          <div class="weather-icon-col">
-            <img
-              id="weather-icon"
-              class="pixel-icon weather-icon"
-              src=""
-              alt="Weather icon"
-            />
-            <p id="weather-condition" class="condition-text"></p>
-            <p id="weather-date"      class="date-text"></p>
-          </div>
-
-          <!-- Column 2: Temperature -->
-          <div class="weather-temp-col">
-            <p class="temp-main" id="temp-main">--°C</p>
-            <div class="feels-row">
-              <i class="nes-icon heart is-small" aria-hidden="true"></i>
-              <span id="temp-feels">Feels like --°C</span>
-            </div>
-          </div>
-
-          <!-- Column 3: Stats -->
-          <div class="weather-stats-col">
-            <div class="stat-item">
-              <span class="stat-label">💧 Humidity</span>
-              <span id="stat-humidity" class="stat-value">--%</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">💨 Wind</span>
-              <span id="stat-wind" class="stat-value">-- km/h</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">👁 Visibility</span>
-              <span id="stat-visibility" class="stat-value">-- km</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">🌡 Pressure</span>
-              <span id="stat-pressure" class="stat-value">-- hPa</span>
-            </div>
-          </div>
-
-        </div><!-- /weather-card-inner -->
-
-        <!-- Minecraft Advice Balloon -->
-        <div class="advice-row">
-          <div
-            class="nes-balloon from-left advice-balloon"
-            role="note"
-            aria-label="Minecraft weather advice"
-          >
-            <p id="advice-text">Loading advice...</p>
+      <!-- Current Weather Card -->
+      <section id="current-weather-section" class="hidden">
+        <div class="nes-container with-title theme-aware" id="weather-card">
+          <p class="title" id="city-name">City Name</p>
+          <div id="weather-content">
+            <!-- Rendered dynamically by ui.js -->
           </div>
         </div>
+      </section>
 
-      </div><!-- /current-card -->
-    </section>
+      <!-- Minecraft Advice Balloon -->
+      <section id="advice-section" class="hidden">
+        <div class="nes-balloon from-left" id="advice-balloon">
+          <p id="advice-text">Advice loads here...</p>
+        </div>
+      </section>
 
-    <!-- ---- 5-Day Forecast ---- -->
-    <section
-      class="forecast-section animate__animated animate__fadeInUp"
-      aria-label="5-day forecast"
-    >
-      <div class="nes-container is-dark forecast-container">
-        <p class="section-title">📅 5-Day Forecast</p>
+      <!-- 5-Day Forecast -->
+      <section id="forecast-section" class="hidden">
+        <h2 class="section-heading">5-Day Forecast</h2>
         <div class="forecast-row" id="forecast-row">
-          <!-- Populated by ui.js renderForecast() -->
+          <!-- 5 forecast cards rendered dynamically -->
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Favorites Sidebar -->
+    <aside class="favorites-sidebar">
+      <div class="nes-container with-title theme-aware">
+        <p class="title">Ender Chest <span id="fav-count-badge" class="fav-count-badge"></span></p>
+
+        <!-- Filter & Sort Controls -->
+        <div class="controls-row">
+          <div class="nes-select">
+            <select id="filter-select">
+              <option value="all">All Weather</option>
+              <option value="Clear">Sunny</option>
+              <option value="Clouds">Cloudy</option>
+              <option value="Rain">Rainy</option>
+              <option value="Snow">Snowy</option>
+              <option value="Thunderstorm">Stormy</option>
+            </select>
+          </div>
+          <div class="nes-select">
+            <select id="sort-select">
+              <option value="name-asc">Name A→Z</option>
+              <option value="name-desc">Name Z→A</option>
+              <option value="temp-asc">Temp ↑</option>
+              <option value="temp-desc">Temp ↓</option>
+              <option value="humidity-asc">Humidity ↑</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Favorites Grid -->
+        <div id="favorites-grid" class="favorites-grid">
+          <!-- Rendered dynamically -->
+          <p class="empty-state" id="empty-favorites">No saved cities yet. Search and star a city!</p>
+        </div>
+
+        <!-- Clear All Favorites -->
+        <div id="clear-all-row" class="clear-all-row hidden">
+          <button type="button" class="nes-btn is-error" id="clear-all-btn" style="font-size:7px;width:100%;">
+            ✕ Clear All
+          </button>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div id="pagination-row" class="pagination-row hidden">
+          <button type="button" class="nes-btn" id="fav-prev-btn">◀</button>
+          <span class="page-info" id="page-info">1 / 1</span>
+          <button type="button" class="nes-btn" id="fav-next-btn">▶</button>
         </div>
       </div>
-    </section>
+    </aside>
 
-  </main><!-- /main-content -->
+  </div>
 
-  <!-- ================================================
-       SCRIPTS (order matters: utils → api → ui → app)
-  ================================================ -->
+  <!-- Weather Particle Animation Container -->
+  <div id="weather-animation" class="rain-container"></div>
+
+  <!-- ===== SCRIPTS ===== -->
   <script src="js/utils.js"></script>
   <script src="js/api.js"></script>
   <script src="js/ui.js"></script>
+  <script src="js/favorites.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/filter.js"></script>
+  <script src="js/sort.js"></script>
+  <script src="js/theme.js"></script>
   <script src="js/app.js"></script>
-
 </body>
 </html>
